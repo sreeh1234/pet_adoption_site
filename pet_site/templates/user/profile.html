@@ -1,0 +1,24 @@
+
+
+{% block content %}
+  <div class="profile-container">
+    <div class="profile-header">
+      <h2>{{ user.username }}'s Profile</h2>
+      <img src="{{ user.profile_image.url }}" alt="Profile Image" class="profile-image">
+    </div>
+
+    <h3>Your Pets:</h3>
+    {% if pets %}
+      <ul>
+        {% for pet in pets %}
+          <li>
+            <img src="{{ pet.pet_image.url }}" alt="{{ pet.pet_name }}" class="pet-image">
+            <a href="{% url 'pet_detail' pet.id %}">{{ pet.pet_name }} - {{ pet.pet_breed }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>You have not added any pets yet.</p>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+<h2>Your Addresses</h2>
+{% for address in addresses %}
+    <div class="address-card">
+        <h3>{{ address.name }}</h3>
+        <p>{{ address.building_no }}, {{ address.street }}</p>
+        <p>{{ address.state }}, {{ address.district }} - {{ address.pincode }}</p>
+        <p>Mobile: {{ address.mobile_no }}</p>
+        <a href="{% url 'delete_address' address.id %}">Delete</a>
+    </div>
+{% empty %}
+    <p>No addresses found. Please add an address.</p>
+{% endfor %}

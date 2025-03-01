@@ -1,0 +1,86 @@
+<!-- user/pets_by_category.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pets in {{ category.name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ccc;
+        }
+        .card-content {
+            padding: 15px;
+        }
+        .card-content h2 {
+            margin: 0 0 10px;
+            font-size: 1.5em;
+            color: #333;
+        }
+        .card-content p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .card-content strong {
+            color: #333;
+        }
+        .no-pets {
+            text-align: center;
+            color: #777;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pets in {{ category.name }}</h1>
+    <div class="container">
+        {% for pet in pets %}
+            <div class="card">
+                {% if pet.pet_image %}
+                <a href="{% url 'pet_detail' pet.id %}" style="text-decoration: none;">
+                    <img src="{{ pet.pet_image.url }}" alt="{{ pet.pet_name }}">
+                {% endif %}
+                <div class="card-content">
+                    <h2>{{ pet.pet_name }}</h2>
+                    <p><strong>Breed:</strong> {{ pet.pet_breed }}</p>
+                    <p><strong>Age:</strong> {{ pet.pet_age }} years</p>
+                    <p><strong>Description:</strong> {{ pet.pet_description }}</p>
+                    <p><strong>Price:</strong> ${{ pet.pet_price }}</p>
+                </div>
+            </a>
+            </div>
+        {% empty %}
+            <p class="no-pets">No pets available in this category at the moment.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
