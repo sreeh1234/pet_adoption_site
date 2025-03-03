@@ -14,9 +14,8 @@ body {
     background-color: #f8f9fa;
     color: #1f1d1d;
     height: 100%;
-    padding-top: 70px;
+    padding-top: 140px;
 }
-
 
 .container-fluid {
     display: flex;
@@ -32,14 +31,14 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     width: 100%;
-    max-width: 900px; 
+    max-width: 600px; 
+    padding: 20px; 
 }
-
 
 .form-card-header {
     background-color: #3C6E71;
     color: #fff;
-    padding: 25px;
+    padding: 20px;
     text-align: center;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -50,12 +49,11 @@ body {
 }
 
 .form-card-body {
-    padding: 30px;
+    padding: 20px; 
 }
 
-
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px; 
 }
 
 label {
@@ -65,35 +63,40 @@ label {
     color: #333;
 }
 
-
 input[type="text"],
 input[type="number"],
 select,
 textarea,
 input[type="file"] {
     width: 100%;
-    padding: 12px;
+    padding: 10px; 
     border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px; 
     margin-top: 5px;
     box-sizing: border-box;
 }
-
 
 textarea {
     resize: vertical;
 }
 
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #3C6E71;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(60, 110, 113, 0.2);
+}
 
 button[type="submit"] {
     width: 100%;
-    padding: 15px;
+    padding: 12px; 
     background-color: #3C6E71;
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 18px;
+    font-size: 16px; 
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -102,30 +105,37 @@ button[type="submit"]:hover {
     background-color: #2c5052;
 }
 
+button[type="submit"]:active {
+    background-color: #2c5052;
+    transform: translateY(2px);
+}
 
 .add-address-link {
     display: inline-block;
     margin-top: 10px;
     color: #3C6E71;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 14px; 
 }
 
 .add-address-link:hover {
     text-decoration: underline;
 }
 
-
 @media (max-width: 767px) {
     .form-card-header {
-        padding: 20px;
+        padding: 15px;
     }
 
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
     }
 
     button[type="submit"] {
-        padding: 12px;
+        padding: 10px;
+    }
+
+    .form-card {
+        width: 90%;
     }
 }

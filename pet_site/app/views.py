@@ -147,7 +147,7 @@ def add_pet(request):
         address_id = request.POST.get('address') 
         selected_address = Address.objects.get(id=address_id) if address_id else None
 
-        # Make sure you're passing the correct fields to the Pet constructor
+        
         pet = Pet(
             pet_name=pet_name,
             pet_description=pet_description,
@@ -157,8 +157,8 @@ def add_pet(request):
             category=category,
             pet_type=pet_type,
             pet_image=pet_image,
-            user=request.user,  # Assign logged-in user
-            address=selected_address  # Address assigned based on user's selection
+            user=request.user, 
+            address=selected_address  
         )
         pet.save()
 
@@ -209,10 +209,11 @@ def add_pet_type(request):
     return render(request, 'user/add_pet_type.html')
 
 def pet_detail(request, pet_id):
+    categories = Category.objects.all()
     pet = get_object_or_404(Pet, id=pet_id)
     user = request.user
     address = pet.address 
-    return render(request, 'user/pet_detail.html', {'pet': pet, 'address': address, 'user': user})
+    return render(request, 'user/pet_detail.html', {'pet': pet, 'address': address, 'user': user,'categories': categories})
 
 def view_pet_detail(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
@@ -223,8 +224,9 @@ def view_pet_detail(request, pet_id):
 
 
 def pet_list(request):
+    categories = Category.objects.all()
     pets = Pet.objects.all()[::-1]
-    return render(request, 'user/pet_list.html', {'pets': pets})
+    return render(request, 'user/pet_list.html', {'pets': pets,'categories': categories})
 
 
 
@@ -390,9 +392,9 @@ def edit_pet(request, pet_id):
 def delete_pet(request, id):
     pet = get_object_or_404(Pet, id=id)
 
-    if pet.user != request.user:  # Check if the pet belongs to the logged-in user
+    if pet.user != request.user:  
         messages.warning(request, "You are not authorized to delete this pet.")
-        return redirect('pet_list')  # Redirect to the pet list page
+        return redirect('pet_list')  
 
     if request.method == 'POST':
         pet.delete()
@@ -405,6 +407,8 @@ def delete_pet(request, id):
 
 @login_required
 def add_address(request):
+    categories = Category.objects.all()
+
     if request.method == 'POST':
         name = request.POST.get('name')
         building_no = request.POST.get('building_no')
@@ -414,7 +418,6 @@ def add_address(request):
         pincode = request.POST.get('pincode')
         mobile_no = request.POST.get('mobile_no')
 
-        # Validate pincode and mobile number formats (basic validation)
         if len(mobile_no) != 10 or not mobile_no.isdigit():
             messages.warning(request, "Please enter a valid 10-digit mobile number.")
             return redirect('add_address')
@@ -437,13 +440,14 @@ def add_address(request):
         messages.success(request, "Address added successfully!")
         return redirect(user_home)  
 
-    return render(request, 'user/add_address.html')
+    return render(request, 'user/add_address.html',{'categories': categories})
 
 
 @login_required
 def view_address(request):
+    categories = Category.objects.all()
     addresses = Address.objects.filter(user=request.user)  
-    return render(request, 'user/view_address.html', {'addresses': addresses})
+    return render(request, 'user/view_address.html', {'addresses': addresses,'categories': categories})
 
 
 
@@ -470,10 +474,11 @@ def delete_address(request, address_id):
 
 
 def category_list(request):
-    categories = Category.objects.all()  # Retrieve all categories
+    categories = Category.objects.all() 
     return render(request, 'user/cat_list.html', {'categories': categories})
 
 def pets_by_category(request, category_id ):
-    pets = Pet.objects.filter(category_id=category_id)  # Filter pets by category
-    category = Category.objects.get(id=category_id)  # Get the category name 
-    return render(request, 'user/pets_cat.html', {'pets': pets, 'category': category})
+    categories = Category.objects.all()
+    pets = Pet.objects.filter(category_id=category_id) 
+    category = Category.objects.get(id=category_id)  
+    return render(request, 'user/pets_cat.html', {'pets': pets, 'category': category,'categories': categories})

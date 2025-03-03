@@ -7,15 +7,53 @@
     {% load static %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="{% static 'pet_details.css' %}">
+    <link rel="stylesheet" href="{% static 'petdetails.css' %}">
 </head>
 <body>
+
+
+    <nav class="navbar navbar-expand-sm navv bg-dark fixed-top">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ms-auto me-5">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="user_home"><i class="fas fa-home"></i> HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="add-pet"><i class="fas fa-paw"></i> ADD PETS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="add_address"><i class="fas fa-map-marker-alt"></i> ADDRESS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="pet-list"><i class="fas fa-list"></i> VIEW LIST</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-th-list"></i> CATEGORIES
+                        </a>
+                        {% for category in categories %}
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="../pets/category/{{5}}">FREE ADOPTION</a></li>
+                            <li><a class="dropdown-item" href="../pets/category/{{6}}">SALE</a></li>
+                        </ul>
+                        {% endfor %}
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="logout"><i class="fas fa-sign-out-alt"></i> LOGOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container my-5">
-        <h1 class="text-center mb-4">{{ pet.pet_name }} Details</h1>
+        <h1 class="text-center mb-4">{{ pet.pet_name }} DETAILS</h1>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="card shadow-sm text-center">
+                <div class="card shadow-sm text-center pet-card">
                     <img src="{{ pet.pet_image.url }}" alt="{{ pet.pet_name }}" class="card-img-top pet-image">
                     <div class="card-body">
                         <h5 class="card-title">{{ pet.pet_name }}</h5>
@@ -30,7 +68,7 @@
             </div>
 
             <div class="col-md-6">
-                <div class="card shadow-sm text-center">
+                <div class="card shadow-sm text-center pet-card">
                     <div class="card-body">
                         <h3 class="text-danger">Owner's Address</h3>
                         <p><strong>Name:</strong> {{ pet.address.name }}</p>
@@ -49,18 +87,17 @@
             <h3>Owner's Profile</h3>
             <div class="profile-section d-flex justify-content-center align-items-center">
                 <a href="{% url 'user_profile' pet.user.id %}">
-                    <!-- Display User's Profile Image and Name -->
-                    <img src="{% if pet.user.profile.profile_image %}{{ pet.user.profile.profile_image.url }}{% else %}{{ 'default_profile_image_url' }}{% endif %}" 
+                    <img src="../../static/images/default_profile_image.png" 
                         alt="dp" 
                         class="profile-img rounded-circle" style="width: 50px; height: 50px;">
 
-                    <span class="mx-2">{{ pet.user.first_name }}</span>
+                    <span class="mx-4"><strong>{{ pet.user.first_name }}</strong></span>
                 </a>
             </div>
         </div>
 
         <div class="text-center mt-4">
-            <a href="{% url 'pets_by_category' pet.category.id %}" class="btn btn-outline-primary mx-2">View more pets in this category</a>
+            <a href="{% url 'pets_by_category' pet.category.id %}" class="btn btn-outline-primary mx-2">View more pets </a>
 
             {% if pet.user == request.user %}
                 <a href="{% url 'delete_pet' pet.id %}" class="btn btn-danger mx-2">Delete</a>
@@ -70,6 +107,6 @@
             <a href="{% url 'pet_list' %}" class="btn btn-secondary mx-2">Back to Pet List</a>
         </div>
     </div>
+
 </body>
 </html>
-

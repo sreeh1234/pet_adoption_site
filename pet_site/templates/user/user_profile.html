@@ -12,7 +12,7 @@
     <div class="container my-5">
         <h1 class="text-center mb-4">{{ user.first_name }}'s Profile</h1>
         <div class="text-center">
-            <img src="{% if user.profile.profile_image %}{{ user.profile.profile_image.url }}{% else %}{{ 'default_profile_image_url' }}{% endif %}" 
+            <img src="../../static/images/default_profile_image.png" 
             alt="dp" class="profile-img rounded-circle" style="width: 150px; height: 150px;">
             <!-- <h3>{{ user.username }}</h3> -->
         </div>

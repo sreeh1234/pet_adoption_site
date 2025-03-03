@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 
-/* General body styling */
 body {
     font-family: 'Arial', sans-serif;
     height: 100vh;
@@ -15,7 +14,6 @@ body {
     overflow: hidden;
 }
 
-/* Main Container */
 .login-container {
     display: flex;
     width: 80%;
@@ -24,7 +22,6 @@ body {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Left Panel (Image) */
 .image-panel {
     flex: 2; 
     background: url('pet.avif') no-repeat center center fixed;

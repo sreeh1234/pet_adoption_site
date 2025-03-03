@@ -1,10 +1,14 @@
-.navv {
-    height: 150px;
-}
+
 
 body {
-    background-color: #f8f9fa;
+    background: url('../static/images/bgbg.avif') no-repeat center center fixed;
+    background-size: fill;
     font-family: Arial, sans-serif;
+    padding-top: 70px;
+    
+}
+.navv{
+    height: 150px;
 }
 
 .container {
