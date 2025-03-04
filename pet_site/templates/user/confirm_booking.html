@@ -1,0 +1,13 @@
+<!-- user/confirm_booking.html -->
+<h2>Confirm Your Booking for {{ pet.pet_name }}</h2>
+
+<p><strong>Name:</strong> {{ pet.pet_name }}</p>
+<p><strong>Description:</strong> {{ pet.pet_description }}</p>
+<p><strong>Age:</strong> {{ pet.pet_age }}</p>
+<p><strong>Breed:</strong> {{ pet.pet_breed }}</p>
+<p><strong>Price:</strong> Free Adoption (No Payment Required)</p>
+
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit">Confirm Booking</button>
+</form>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book {{ pet.pet_name }}</title>
+</head>
+<body>
+    <h1>Book {{ pet.pet_name }}</h1>
+    <p><strong>Price:</strong> ₹{{ pet.pet_price }}</p>
+    <p><strong>20% payment:</strong> ₹{{ amount_to_pay }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="payment_status">Payment Status:</label>
+        <select name="payment_status">
+            <option value="unpaid">Unpaid</option>
+            <option value="paid">Paid</option>
+        </select>
+        <button type="submit">Book Pet</button>
+    </form>
+</body>
+</html>

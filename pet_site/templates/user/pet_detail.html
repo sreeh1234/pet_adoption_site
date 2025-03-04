@@ -17,16 +17,16 @@
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav ms-auto me-5">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="user_home"><i class="fas fa-home"></i> HOME</a>
+                        <a class="nav-link text-white" href="../user_home"><i class="fas fa-home"></i> HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="add-pet"><i class="fas fa-paw"></i> ADD PETS</a>
+                        <a class="nav-link text-white" href="../add-pet"><i class="fas fa-paw"></i> ADD PETS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="add_address"><i class="fas fa-map-marker-alt"></i> ADDRESS</a>
+                        <a class="nav-link text-white" href="../add_address"><i class="fas fa-map-marker-alt"></i> ADDRESS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="pet-list"><i class="fas fa-list"></i> VIEW LIST</a>
+                        <a class="nav-link text-white" href="../pet-list"><i class="fas fa-list"></i> VIEW LIST</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -41,7 +41,7 @@
                         {% endfor %}
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="logout"><i class="fas fa-sign-out-alt"></i> LOGOUT</a>
+                        <a class="nav-link text-white" href="../logout"><i class="fas fa-sign-out-alt"></i> LOGOUT</a>
                     </li>
                 </ul>
             </div>
@@ -63,6 +63,12 @@
                         <p class="card-text"><strong>Price:</strong> ₹{{ pet.pet_price }}</p>
                         <p class="card-text"><strong>Adoption Type:</strong> {{ pet.category.name }}</p>
                         <p class="card-text"><strong>Pet Type:</strong> {{ pet.pet_type.name }}</p>
+
+                        {% if pet.is_available %}
+                            <a href="{% url 'book_pet' pet.id %}" class="btn btn-primary">Book Now</a>
+                        {% else %}
+                            <p class="text-danger">Out of Stock</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

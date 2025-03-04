@@ -15,41 +15,6 @@
 <body>
 
 
-    <nav class="navbar navbar-expand-sm navv bg-dark fixed-top">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav ms-auto me-5">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="user_home"><i class="fas fa-home"></i> HOME</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="add-pet"><i class="fas fa-paw"></i> ADD PETS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="add_address"><i class="fas fa-map-marker-alt"></i> ADDRESS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="pet-list"><i class="fas fa-list"></i> VIEW PETS</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-th-list"></i> CATEGORIES
-                        </a>
-                        {% for category in categories %}
-
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="pets/category/{{5}}">FREE ADOPTION</a></li>
-                            <li><a class="dropdown-item" href="pets/category/{{6}}">SALE</a></li>
-                        </ul>
-                        {% endfor %}
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="logout"><i class="fas fa-sign-out-alt"></i> LOGOUT</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
 
 
@@ -65,59 +30,59 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="pet_name">Pet Name</label>
-                                <input type="text" id="pet_name" name="pet_name" class="form-control" required>
+                                <input type="text" id="pet_name" name="pet_name" class="form-control" required value="{{ form.pet_name.value|default:'' }}">
                             </div>
-
+                
                             <div class="form-group">
                                 <label for="pet_age">Pet Age</label>
-                                <input type="number" id="pet_age" name="pet_age" class="form-control" min="0" required>
+                                <input type="number" id="pet_age" name="pet_age" class="form-control" min="0" required value="{{ form.pet_age.value|default:'' }}">
                             </div>
-
+                
                             <div class="form-group">
                                 <label for="pet_price">Pet Price</label>
-                                <input type="number" id="pet_price" name="pet_price" class="form-control" min="0">
+                                <input type="number" id="pet_price" name="pet_price" class="form-control" min="0" value="{{ form.pet_price.value|default:'' }}">
                             </div>
-
+                
                             <div class="form-group">
                                 <label for="pet_breed">Pet Breed</label>
-                                <input type="text" id="pet_breed" name="pet_breed" class="form-control">
+                                <input type="text" id="pet_breed" name="pet_breed" class="form-control" value="{{ form.pet_breed.value|default:'' }}">
                             </div>
-
+                
                             <div class="form-group">
                                 <label for="category">Adoption Type</label>
                                 <select id="category" name="category" class="form-control" required>
                                     {% for category in categories %}
-                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                        <option value="{{ category.id }}" {% if category.id == form.category.value %}selected{% endif %}>{{ category.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                         </div>
-
+                
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="pet_description">Pet Description</label>
-                                <textarea id="pet_description" name="pet_description" class="form-control" rows="5" required></textarea>
+                                <textarea id="pet_description" name="pet_description" class="form-control" rows="5" required>{{ form.pet_description.value|default:'' }}</textarea>
                             </div>
-
+                
                             <div class="form-group">
                                 <label for="pet_type">Pet Type</label>
                                 <select id="pet_type" name="pet_type" class="form-control" required>
                                     {% for pet_type in pet_types %}
-                                        <option value="{{ pet_type.id }}">{{ pet_type.name }}</option>
+                                        <option value="{{ pet_type.id }}" {% if pet_type.id == form.pet_type.value %}selected{% endif %}>{{ pet_type.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-
+                
                             <div class="form-group">
                                 <label for="pet_image">Pet Image</label>
                                 <input type="file" id="pet_image" name="pet_image" class="form-control" accept="image/*" required>
                             </div>
-
+                
                             <div class="form-group">
                                 <label for="address">Select Address</label>
                                 <select name="address" id="address" class="form-control" required>
                                     {% for address in addresses %}
-                                        <option value="{{ address.id }}">{{ address.name }}, {{ address.building_no }} - {{ address.street }}</option>
+                                        <option value="{{ address.id }}" {% if address.id == form.address.value %}selected{% endif %}>{{ address.name }}, {{ address.building_no }} - {{ address.street }}</option>
                                     {% empty %}
                                         <option value="">No addresses available</option>
                                     {% endfor %}
@@ -126,10 +91,12 @@
                             </div>
                         </div>
                     </div>
+                
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary btn-block">Add Pet</button>
                     </div>
                 </form>
+                
             </div>
         </div>
     </div>

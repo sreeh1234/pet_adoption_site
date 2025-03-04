@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Successful</title>
+</head>
+<body>
+    
+    <h2>Booking Successful</h2>
+
+    {% if is_free_adoption %}
+        <p>Your booking for the pet {{ pet_name }} has been successfully confirmed. Thank you for adopting!</p>
+    {% else %}
+        <p>Your booking for the pet {{ pet_name }} has been successfully confirmed. Please proceed with the payment to complete your booking.</p>
+    {% endif %}
+
+    <a href="../user_home">Go back to Home</a>
+
+</body>
+</html>

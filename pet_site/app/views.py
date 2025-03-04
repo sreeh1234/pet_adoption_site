@@ -3,11 +3,15 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from .models import *
 import os
+from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 import random
+import razorpay
+import json
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -124,6 +128,11 @@ def user_home(request):
         return redirect(pet_login)
     
 
+def user_profile(request, user_id):
+    user = User.objects.get(id=user_id)
+    pets = Pet.objects.filter(user=user)
+    return render(request, 'user/user_profile.html', {'user': user, 'pets': pets})
+    
 
 @login_required
 def add_pet(request):
@@ -170,19 +179,6 @@ def add_pet(request):
         'addresses': addresses  
     })
 
-
-def user_profile(request, user_id):
-    user = User.objects.get(id=user_id)
-    pets = Pet.objects.filter(user=user)
-    return render(request, 'user/user_profile.html', {'user': user, 'pets': pets})
-
-  
-
-
-
-
-
-
 def add_category(request):
     if request.method == 'POST':
         category_name = request.POST.get('name')
@@ -208,6 +204,7 @@ def add_pet_type(request):
 
     return render(request, 'user/add_pet_type.html')
 
+
 def pet_detail(request, pet_id):
     categories = Category.objects.all()
     pet = get_object_or_404(Pet, id=pet_id)
@@ -221,8 +218,6 @@ def view_pet_detail(request, pet_id):
 
     return render(request, 'admin/view_pet_details.html', {'pet': pet, 'address': address})
 
-
-
 def pet_list(request):
     categories = Category.objects.all()
     pets = Pet.objects.all()[::-1]
@@ -230,84 +225,11 @@ def pet_list(request):
 
 
 
-# def edit_pet(request, pet_id):
-#     pet = get_object_or_404(Pet, id=pet_id)  
-#     categories = Category.objects.all()
-#     pet_types = PetType.objects.all()
-
-#     if request.method == 'POST':
-#         pet_name = request.POST.get('pet_name')
-#         pet_description = request.POST.get('pet_description')
-#         pet_age = request.POST.get('pet_age')
-#         pet_price = request.POST.get('pet_price')
-#         pet_breed = request.POST.get('pet_breed')
-#         category_id = request.POST.get('category')
-#         pet_type_id = request.POST.get('pet_type')
-#         pet_image = request.FILES.get('pet_image')
-
-#         if not pet_name or not pet_description or not pet_age or not pet_price or not pet_breed:
-#             messages.error(request, "All fields are required.")
-#             return render(request, 'user/edit_pet.html', {
-#                 'pet': pet,
-#                 'categories': categories,
-#                 'pet_types': pet_types
-#             })
-
-#         try:
-#             pet_age = int(pet_age)
-#             pet_price = int(pet_price)
-#         except ValueError:
-#             messages.error(request, "Age and price must be numbers.")
-#             return render(request, 'user/edit_pet.html', {
-#                 'pet': pet,
-#                 'categories': categories,
-#                 'pet_types': pet_types
-#             })
-
-#         try:
-#             category = Category.objects.get(id=category_id)
-#             pet_type = PetType.objects.get(id=pet_type_id)
-#         except Category.DoesNotExist:
-#             messages.error(request, "Invalid category.")
-#             return render(request, 'user/edit_pet.html', {
-#                 'pet': pet,
-#                 'categories': categories,
-#                 'pet_types': pet_types
-#             })
-#         except PetType.DoesNotExist:
-#             messages.error(request, "Invalid pet type.")
-#             return render(request, 'user/edit_pet.html', {
-#                 'pet': pet,
-#                 'categories': categories,
-#                 'pet_types': pet_types
-#             })
-
-#         pet.pet_name = pet_name
-#         pet.pet_description = pet_description
-#         pet.pet_age = pet_age
-#         pet.pet_price = pet_price
-#         pet.pet_breed = pet_breed
-#         pet.category = category
-#         pet.pet_type = pet_type
-
-#         if pet_image: 
-#             pet.pet_image = pet_image
-#         pet.save()
-
-#         messages.success(request, "Pet updated successfully.")
-#         return redirect('pet_list')  
-    
-#     return render(request, 'user/edit_pet.html', {
-#         'pet': pet,
-#         'categories': categories,
-#         'pet_types': pet_types
-#     })
-
 def edit_pet(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
-    if pet.user != request.user:  # Check if the pet belongs to the logged-in user
+    if pet.user != request.user:  
         messages.warning(request, "You are not authorized to edit this pet.")
-        return redirect('pet_list')  # Redirect to the pet list page
+        return redirect('pet_list')  
 
     categories = Category.objects.all()
     pet_types = PetType.objects.all()
@@ -367,7 +289,7 @@ def edit_pet(request, pet_id):
         pet.category = category
         pet.pet_type = pet_type
 
-        if pet_image:  # Only update image if a new one is uploaded
+        if pet_image:  
             pet.pet_image = pet_image
         pet.save()
 
@@ -381,14 +303,6 @@ def edit_pet(request, pet_id):
     })
 
 
-# def delete_pet(request, id):
-#     pet = get_object_or_404(Pet, id=id)
-
-#     if request.method == 'POST':
-#         pet.delete()
-#         return redirect('pet_list')
-
-#     return render(request, 'user/confirm_delete.html', {'pet': pet})
 def delete_pet(request, id):
     pet = get_object_or_404(Pet, id=id)
 
@@ -450,17 +364,6 @@ def view_address(request):
     return render(request, 'user/view_address.html', {'addresses': addresses,'categories': categories})
 
 
-
-# @login_required
-# def delete_address(request, address_id):
-#     address = get_object_or_404(Address, id=address_id, user=request.user) 
-
-#     if request.method == 'POST':
-#         address.delete()
-#         messages.success(request, "Address deleted successfully.")
-#         return redirect(user_home)  
-
-#     return render(request, 'user/address_delete.html', {'address': address})
 @login_required
 def delete_address(request, address_id):
     address = get_object_or_404(Address, id=address_id, user=request.user)
@@ -477,8 +380,130 @@ def category_list(request):
     categories = Category.objects.all() 
     return render(request, 'user/cat_list.html', {'categories': categories})
 
+
+
 def pets_by_category(request, category_id ):
     categories = Category.objects.all()
     pets = Pet.objects.filter(category_id=category_id) 
     category = Category.objects.get(id=category_id)  
     return render(request, 'user/pets_cat.html', {'pets': pets, 'category': category,'categories': categories})
+
+
+
+@login_required
+def book_pet(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id)
+    amount_to_pay = pet.pet_price * Decimal(0.20)
+    free_adoption_category = Category.objects.get(name="Free Adoption")  
+
+    if pet.category == free_adoption_category:
+        if request.method == 'POST':
+            booking = Booking.objects.create(
+                pet=pet,
+                user=request.user,
+                payment_status=True,  
+                amount_paid=0  
+            )
+            pet.is_available = False 
+            pet.save()
+
+            messages.success(request, f"Your booking for the pet '{pet.pet_name}' was successful! Enjoy your adoption.")
+            return render(request, 'user/booking_success.html', {'is_free_adoption': True, 'pet_name': pet.pet_name})
+
+        return render(request, 'user/confirm_booking.html', {'pet': pet})
+
+    if request.method == 'POST':
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        razorpay_order = client.order.create(
+            {"amount": int(amount_to_pay) * 100, "currency": "INR", "payment_capture": "1"}
+        )
+        order_id = razorpay_order['id']
+
+        order = Order.objects.create(
+            name=request.user.first_name,
+            amount=amount_to_pay,
+            provider_order_id=order_id,
+            pet=pet,
+            user=request.user
+        )
+        order.save()
+
+        messages.success(request, "Booking successful! Please proceed with the payment.")
+        return render(
+            request,
+            "user/payment.html",
+            {
+                "callback_url": "http://127.0.0.1:8000/callback", 
+                "razorpay_key": settings.RAZORPAY_KEY_ID,
+                "order": order,
+            },
+        )
+
+    return render(request, 'user/book_pet.html', {'pet': pet, 'amount_to_pay': amount_to_pay})
+
+
+
+@csrf_exempt
+def callback(request):
+    def verify_signature(response_data):
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        return client.utility.verify_payment_signature(response_data)
+
+    if "razorpay_signature" in request.POST:
+        payment_id = request.POST.get("razorpay_payment_id", "")
+        provider_order_id = request.POST.get("razorpay_order_id", "")
+        signature_id = request.POST.get("razorpay_signature", "")
+        
+        try:
+            order = Order.objects.get(provider_order_id=provider_order_id)
+        except Order.DoesNotExist:
+            messages.error(request, "Order not found.")
+            return redirect('error_page')
+
+        order.payment_id = payment_id
+        order.signature_id = signature_id
+
+        if verify_signature(request.POST):
+            order.status = PaymentStatus.SUCCESS
+            order.save()
+
+            pet = order.pet
+            pet.is_available = False
+            pet.save()
+
+            messages.success(request, "Payment successfully completed. Your booking is confirmed!")
+            return render(request, "callback.html", context={"status": order.status})
+
+        else:
+            order.status = PaymentStatus.FAILURE
+            order.save()
+            messages.error(request, "Payment failed. Please try again.")
+            return redirect("buyproduct")
+
+    else:
+        try:
+            error_metadata = json.loads(request.POST.get("error[metadata]"))
+            payment_id = error_metadata.get("payment_id")
+            provider_order_id = error_metadata.get("order_id")
+            order = Order.objects.get(provider_order_id=provider_order_id)
+
+            order.payment_id = payment_id
+            order.status = PaymentStatus.FAILURE
+            order.save()
+            messages.error(request, "Error in callback data. Please contact support.")
+            return render(request, "callback.html", context={"status": order.status})
+        except (json.JSONDecodeError, Order.DoesNotExist):
+            messages.error(request, "Error in callback data. Please contact support.")
+            return redirect('error_page')
+
+
+@login_required
+def view_bookings(request):
+    bookings = Booking.objects.filter(user=request.user)
+    return render(request, 'user/view_bookings.html', {'bookings': bookings})
+
+@login_required
+def booking_success(request):
+    return render(request, 'user/booking_success.html')
+
+

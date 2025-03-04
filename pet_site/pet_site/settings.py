@@ -133,3 +133,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'sreehapzzz@gmail.com'
 EMAIL_HOST_PASSWORD = 'whev ecco krlz qknk'
+
+
+RAZORPAY_KEY_ID = 'rzp_test_9WalrA8zZjNMVG'
+RAZORPAY_KEY_SECRET = 'VSks8ajMWMdAB2mAjoM6YMpO'

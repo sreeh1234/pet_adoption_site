@@ -29,7 +29,13 @@ urlpatterns=[
     path('delete_address/<int:address_id>', views.delete_address, name='delete_address'),
     path('categories', views.category_list, name='category_list'),
     path('pets/category/<int:category_id>', views.pets_by_category, name='pets_by_category'),
-    path('user/<int:user_id>/profile/', views.user_profile, name='user_profile'),
+    path('user/<int:user_id>/profile', views.user_profile, name='user_profile'),
+    path('book_pet/<int:pet_id>', views.book_pet, name='book_pet'),
+    path('callback',views.callback,name="callback"),
+    path('view_bookings', views.view_bookings, name='view_bookings'),
+    path('booking_success', views.booking_success, name='booking_success'),
+    
+    
 
 
 
