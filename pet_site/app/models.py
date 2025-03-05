@@ -67,7 +67,7 @@ class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     booking_date = models.DateTimeField(auto_now_add=True)
     payment_status = models.BooleanField(default=False)  # False: Not Paid, True: Paid
-    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    amount_paid = models.IntegerField()
 
     def __str__(self):
         return f"{self.user.username} booked {self.pet.pet_name}"    

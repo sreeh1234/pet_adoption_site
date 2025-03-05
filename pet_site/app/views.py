@@ -352,7 +352,7 @@ def add_address(request):
         )
         address.save()
         messages.success(request, "Address added successfully!")
-        return redirect(user_home)  
+        return redirect('add_pet')  
 
     return render(request, 'user/add_address.html',{'categories': categories})
 
@@ -393,18 +393,18 @@ def pets_by_category(request, category_id ):
 @login_required
 def book_pet(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
-    amount_to_pay = pet.pet_price * Decimal(0.20)
-    free_adoption_category = Category.objects.get(name="Free Adoption")  
+    amount_to_pay = pet.pet_price * 0.20
+    free_adoption_category = Category.objects.get(name="Free Adoption")
 
     if pet.category == free_adoption_category:
         if request.method == 'POST':
             booking = Booking.objects.create(
                 pet=pet,
                 user=request.user,
-                payment_status=True,  
-                amount_paid=0  
+                payment_status=True,
+                amount_paid=0
             )
-            pet.is_available = False 
+            pet.is_available = False
             pet.save()
 
             messages.success(request, f"Your booking for the pet '{pet.pet_name}' was successful! Enjoy your adoption.")
@@ -413,6 +413,13 @@ def book_pet(request, pet_id):
         return render(request, 'user/confirm_booking.html', {'pet': pet})
 
     if request.method == 'POST':
+        booking = Booking.objects.create(
+            pet=pet,
+            user=request.user,
+            payment_status=False,
+            amount_paid=amount_to_pay
+        )
+
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
         razorpay_order = client.order.create(
             {"amount": int(amount_to_pay) * 100, "currency": "INR", "payment_capture": "1"}
@@ -433,13 +440,14 @@ def book_pet(request, pet_id):
             request,
             "user/payment.html",
             {
-                "callback_url": "http://127.0.0.1:8000/callback", 
+                "callback_url": "http://127.0.0.1:8000/callback",
                 "razorpay_key": settings.RAZORPAY_KEY_ID,
                 "order": order,
             },
         )
 
     return render(request, 'user/book_pet.html', {'pet': pet, 'amount_to_pay': amount_to_pay})
+
 
 
 

@@ -63,13 +63,16 @@
                         <p class="card-text"><strong>Price:</strong> ₹{{ pet.pet_price }}</p>
                         <p class="card-text"><strong>Adoption Type:</strong> {{ pet.category.name }}</p>
                         <p class="card-text"><strong>Pet Type:</strong> {{ pet.pet_type.name }}</p>
-
-                        {% if pet.is_available %}
+                    
+                        {% if pet.is_available and pet.user != request.user %}
                             <a href="{% url 'book_pet' pet.id %}" class="btn btn-primary">Book Now</a>
+                        {% elif pet.user == request.user %}
+                            <p class="text-muted"></p>
                         {% else %}
-                            <p class="text-danger">Out of Stock</p>
+                            <p class="text-danger">ADOPTED</p>
                         {% endif %}
                     </div>
+                    
                 </div>
             </div>
 

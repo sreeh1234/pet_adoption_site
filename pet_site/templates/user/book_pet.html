@@ -4,20 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book {{ pet.pet_name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        
+        h1 {
+            color: #3C6E71;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        button {
+            background-color: #3C6E71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #2c5052;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #555;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Book {{ pet.pet_name }}</h1>
-    <p><strong>Price:</strong> ₹{{ pet.pet_price }}</p>
-    <p><strong>20% payment:</strong> ₹{{ amount_to_pay }}</p>
 
-    <form method="POST">
-        {% csrf_token %}
-        <label for="payment_status">Payment Status:</label>
-        <select name="payment_status">
-            <option value="unpaid">Unpaid</option>
-            <option value="paid">Paid</option>
-        </select>
-        <button type="submit">Book Pet</button>
-    </form>
+    <h1>Book {{ pet.pet_name }}</h1>
+    <div class="form-container">
+        <p><strong>Price:</strong> ₹{{ pet.pet_price }}</p>
+        <p><strong>20% payment:</strong> ₹{{ amount_to_pay|floatformat:2 }}</p>
+
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <button type="submit">Book Pet</button>
+        </form>
+
+        
+    </div>
+
 </body>
 </html>
