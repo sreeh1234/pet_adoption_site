@@ -65,6 +65,7 @@ class Otp(models.Model):
 class Booking(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
     booking_date = models.DateTimeField(auto_now_add=True)
     payment_status = models.BooleanField(default=False)  # False: Not Paid, True: Paid
     amount_paid = models.IntegerField()
