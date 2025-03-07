@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Address</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static 'addaddresss.css' %}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-custom bg-dark fixed-top">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ms-auto me-5">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="user_home"><i class="fas fa-home"></i> HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="add-pet"><i class="fas fa-paw"></i> ADD PETS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="add_address"><i class="fas fa-map-marker-alt"></i> ADDRESS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="pet-list"><i class="fas fa-list"></i> VIEW PETS</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-th-list"></i> CATEGORIES
+                        </a>
+                        {% for category in categories %}
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="pets/category/{{5}}">FREE ADOPTION</a></li>
+                            <li><a class="dropdown-item" href="pets/category/{{6}}">SALE</a></li>
+                        </ul>
+                        {% endfor %}
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="logout"><i class="fas fa-sign-out-alt"></i> LOGOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav> 
+
+    <div class="container-fluid">
+        <div class="address-form-container">
+            <div class="address-form-header">
+                <h4>ADD ADDRESS</h4>
+            </div>
+            <div class="address-form-body">
+                <form method="POST" class="address-form">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" name="name" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="building_no">Building No / Address:</label>
+                                <input type="text" name="building_no" id="building_no" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State:</label>
+                                <input type="text" name="state" id="state" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pincode">Pincode:</label>
+                                <input type="text" name="pincode" id="pincode" pattern="^\d{6}$" title="Pincode should be a 6-digit number" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="street">Street:</label>
+                                <input type="text" name="street" id="street" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="district">District:</label>
+                                <input type="text" name="district" id="district" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mobile_no">Mobile No:</label>
+                                <input type="text" name="mobile_no" id="mobile_no" pattern="^\d{10}$" title="Mobile number should be a 10-digit number" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit">Add Address</button>
+                </form>
+
+                <a href="view_address" class="view-address-link">YOUR ADDRESSES</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

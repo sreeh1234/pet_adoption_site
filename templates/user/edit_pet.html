@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edit {{ pet.pet_name }}</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static 'editpet.css' %}">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Edit Pet: {{ pet.pet_name }}</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="pet_name">Pet Name</label>
+                <input type="text" id="pet_name" name="pet_name" value="{{ pet.pet_name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pet_description">Pet Description</label>
+                <textarea id="pet_description" name="pet_description" required>{{ pet.pet_description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pet_age">Pet Age</label>
+                <input type="number" id="pet_age" name="pet_age" value="{{ pet.pet_age }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pet_price">Pet Price</label>
+                <input type="number" id="pet_price" name="pet_price" value="{{ pet.pet_price }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pet_breed">Pet Breed</label>
+                <input type="text" id="pet_breed" name="pet_breed" value="{{ pet.pet_breed }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Adoption Type</label>
+                <select id="category" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category == pet.category %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="pet_type">Pet Type</label>
+                <select id="pet_type" name="pet_type" required>
+                    {% for pet_type in pet_types %}
+                        <option value="{{ pet_type.id }}" {% if pet_type == pet.pet_type %}selected{% endif %}>{{ pet_type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="pet_image">Pet Image</label>
+                <input type="file" id="pet_image" name="pet_image">
+            </div>
+
+            <button type="submit">Update Pet</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

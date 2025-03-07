@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <!-- <h1>Booking Confirmation</h1>
+    <p>Thank you for your booking!</p>
+    <p>Pet Name: {{ booking.pet.name }}</p>
+    <p>Address: {{ booking.address.street }}, {{ booking.address.district }}, {{ booking.address.state }} - {{ booking.address.pincode }}</p>
+    <p>Contact Number: {{ booking.address.mobile_no }}</p>
+    <p>Status: Your booking is confirmed!</p>
+    <a href="{% url 'pet_list' %}">Go back to pet list</a> -->
+
+    <!-- user/confirm_payment.html -->
+<!-- <h1>Confirm Your Payment</h1>
+<p>You are about to book the following pet:</p>
+<p><strong>Pet Name:</strong> {{ booking.pet.pet_name }}</p>
+<p><strong>Amount:</strong> ₹{{ booking.amount_paid }}</p>
+<p><strong>Address:</strong> {{ booking.address }}</p>
+
+<form action="{% url 'process_payment' booking.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">Confirm Payment</button>
+</form> -->
+        <!-- user/confirm_payment.html -->
+<h1>Confirm Your Booking</h1>
+<p>You are about to book the following pet:</p>
+<p><strong>Pet Name:</strong> {{ booking.pet.pet_name }}</p>
+<p><strong>Amount:</strong> ₹{{ booking.amount_paid }}</p>
+<p><strong>Address:</strong> {{ booking.address }}</p>
+
+{% if booking.amount_paid > 0 %}
+    <form action="{% url 'process_payment' booking.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Confirm Payment</button>
+    </form>
+{% else %}
+    <p>This is a free adoption. No payment is required.</p>
+    <form action="{% url 'view_bookings' %}" method="GET">
+        <button type="submit">Confirm Booking</button>
+    </form>
+{% endif %}
+
+
+</body>
+</html>
